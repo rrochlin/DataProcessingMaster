@@ -26,10 +26,10 @@ def main():
     # collect and organise all of the data then make it into nice things
     conditionDictionary = getConditions()
     # remove old logs from previous run
-    if os.path.exists(os.path.join("../","dataInfo","interpolation_Effect_Log.txt")):
-        os.remove(os.path.join("../","dataInfo","interpolation_Effect_Log.txt"))
-    if os.path.exists(os.path.join("../","dataInfo","time_Frequency_Error_Log.txt")):
-        os.remove(os.path.join("../","dataInfo","time_Frequency_Error_Log.txt"))
+    if os.path.exists(os.path.join("...","dataInfo","interpolation_Effect_Log.txt")):
+        os.remove(os.path.join("...","dataInfo","interpolation_Effect_Log.txt"))
+    if os.path.exists(os.path.join("...","dataInfo","time_Frequency_Error_Log.txt")):
+        os.remove(os.path.join("...","dataInfo","time_Frequency_Error_Log.txt"))
 
     columns = conditionDictionary["Columns"]
     particle = conditionDictionary["Particle"]
@@ -70,7 +70,7 @@ def main():
                 checkFileList.append(specificFile)
         conditionDictionary["Days"][day]["confirmedFiles"] = checkFileList
 
-        saveToCSV(os.path.join("..","proccessedData",date), data)
+        saveToCSV(os.path.join("...","proccessedData",date), data)
 
         logger.debug(data)
 
@@ -79,12 +79,12 @@ def main():
 
         interpDF = interpolateMissingData(
             data, cutOffTime=start, endTime=end, date=date)
-        saveToCSV(os.path.join("..","interpolatedData",date), interpDF)
+        saveToCSV(os.path.join("...","interpolatedData",date), interpDF)
 
         mergedDataFrame = mergeDataFrames(
             interpDF, particle, start, end)
 
-        saveToCSV(os.path.join("..","mergedData"),{f"mergedData_{date}": mergedDataFrame})
+        saveToCSV(os.path.join("...","mergedData"),{f"mergedData_{date}": mergedDataFrame})
 
         # Set process flag to True so that time won't be wasted processing old data
         conditionDictionary["Days"][day]["processed"] = True
@@ -134,12 +134,12 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
     endTime = pd.Timestamp(end)
 
 
-    directory = f'../dataInfo/'
+    directory = os.path.join('..','dataInfo')
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     # fout = open(f'{directory}/time_Frequency_Error_Log.txt', 'wt')
-    fout = open(f'../dataInfo/time_Frequency_Error_Log.txt', 'a')
+    fout = open(os.path.join('...','dataInfo','time_Frequency_Error_Log.txt'), 'a')
     fout.write(f"{'-'*60}\n{date}\n{'-'*60}\n")
     errors = {}
     errorCount = {}
@@ -207,25 +207,27 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
     return
 
 
-def interpolateMissingData(data, cutOffTime, endTime, date):
-    # fout = open(f'../dataInfo/{date}/interpolation_Effect_Log{date}.txt', 'wt')
-    fout = open(f'../dataInfo/interpolation_Effect_Log.txt', 'a')
+def interpolateMissingData(data, cutOffTime, endTime, date, cutoff:int = 40, freq:str = '10s'):
+    '''
+    takes in a dictionary object {data} with n pandas data frames as values. then handles calling fillDf
+    with the specified parameter to interpolate the data. defualt set to 10 second intervals and won't interpolate data over 40 seconds
+    you can reduce the time frequency lower, however this can drastically increase the time it take to run the data cleaning process,
+    especially with larger sets of data.
+    '''
+    fout = open(os.path.join('...','dataInfo','interpolation_Effect_Log.txt'), 'a')
     interpDF = {}
     fout.write(f"\n{date}\n\n")
 
     for x in data:
         df = data[x]
-        cutoff = 40
-        freq = '10S'
         try:
             interpDF[x], accuracy = fillDf(
                 df, freq, cutOffTime, endTime, cutoff)
             logger.info(f"{x}     {accuracy}")
-            fout.write(
-                x+' ' + '\n' + accuracy[0] + '\n' + accuracy[1] + '\n' + accuracy[2] + '\n\n')
+            fout.write(f"{x}\n{accuracy[0]}\n{accuracy[1]}\n{accuracy[2]}\n\n")
         except IndexError:
             logger.exception(f"{x} NO DATA")
-            fout.write(x+'NO DATA'+'\n')
+            fout.write(f"{x} NO DATA\n")
     fout.close()
     return interpDF
 
