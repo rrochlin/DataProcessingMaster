@@ -6,9 +6,6 @@ Columns:
 Days:
   4-13-22:
     confirmedFiles:
-    - ./Data\A16_4_13_22.txt
-    - ./Data\A7_4_13_22.txt
-    - ./Data\A8_4_13_22.txt
     - ../Data\A16_4_13_22.txt
     - ../Data\A7_4_13_22.txt
     - ../Data\A8_4_13_22.txt
@@ -55,5 +52,5 @@ Days:
 Particle: PM2.5_Std
 dayEnd: '17:00'
 dayStart: '10:00'
-processAll: false
+processAll: true
 sensorConditions: {}
