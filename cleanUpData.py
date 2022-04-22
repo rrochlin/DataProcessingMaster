@@ -50,7 +50,7 @@ def cleanUp(cutoff, timeRectifyingParams, filePaths, columns, badTimes, date, co
         # columns have spaces in front and in between for the merged Data Time column
         df.columns = df.columns.str.replace(" ","")
 
-        # This assumes file start with ./Data\\{sensorName} followed by either "-" or "_"
+        # This assumes file start with ../Data\\{sensorName} followed by either "-" or "_"
         sensorNamePattern = r"Data\\[a-zA-Z]+\d+"
         nameMatch = re.search(sensorNamePattern, file)
         name = nameMatch[0].replace("Data\\","")

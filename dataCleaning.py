@@ -26,10 +26,10 @@ def main():
     # collect and organise all of the data then make it into nice things
     conditionDictionary = getConditions()
     # remove old logs from previous run
-    if os.path.exists("./dataInfo/interpolation_Effect_Log.txt"):
-        os.remove("./dataInfo/interpolation_Effect_Log.txt")
-    if os.path.exists("./dataInfo/time_Frequency_Error_Log.txt"):
-        os.remove("./dataInfo/time_Frequency_Error_Log.txt")
+    if os.path.exists("../dataInfo/interpolation_Effect_Log.txt"):
+        os.remove("../dataInfo/interpolation_Effect_Log.txt")
+    if os.path.exists("../dataInfo/time_Frequency_Error_Log.txt"):
+        os.remove("../dataInfo/time_Frequency_Error_Log.txt")
 
     columns = conditionDictionary["Columns"]
     particle = conditionDictionary["Particle"]
@@ -70,7 +70,7 @@ def main():
                 checkFileList.append(specificFile)
         conditionDictionary["Days"][day]["confirmedFiles"] = checkFileList
 
-        saveToCSV(f'./proccessedData/{date}', data)
+        saveToCSV(f'../proccessedData/{date}', data)
 
         logger.debug(data)
 
@@ -79,12 +79,12 @@ def main():
 
         interpDF = interpolateMissingData(
             data, cutOffTime=start, endTime=end, date=date)
-        saveToCSV(f'./interpolatedData/{date}', interpDF)
+        saveToCSV(f'../interpolatedData/{date}', interpDF)
 
         mergedDataFrame = mergeDataFrames(
             interpDF, particle, start, end)
 
-        saveToCSV(f"./mergedData/",
+        saveToCSV(f"../mergedData/",
                   {f"mergedData_{date}": mergedDataFrame})
 
         # Set process flag to True so that time won't be wasted processing old data
@@ -135,12 +135,12 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
     endTime = pd.Timestamp(end)
 
 
-    directory = f'./dataInfo/'
+    directory = f'../dataInfo/'
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     # fout = open(f'{directory}/time_Frequency_Error_Log.txt', 'wt')
-    fout = open(f'./dataInfo/time_Frequency_Error_Log.txt', 'a')
+    fout = open(f'../dataInfo/time_Frequency_Error_Log.txt', 'a')
     fout.write(f"{'-'*60}\n{date}\n{'-'*60}\n")
     errors = {}
     errorCount = {}
@@ -209,8 +209,8 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
 
 
 def interpolateMissingData(data, cutOffTime, endTime, date):
-    # fout = open(f'./dataInfo/{date}/interpolation_Effect_Log{date}.txt', 'wt')
-    fout = open(f'./dataInfo/interpolation_Effect_Log.txt', 'a')
+    # fout = open(f'../dataInfo/{date}/interpolation_Effect_Log{date}.txt', 'wt')
+    fout = open(f'../dataInfo/interpolation_Effect_Log.txt', 'a')
     interpDF = {}
     fout.write(f"\n{date}\n\n")
 
