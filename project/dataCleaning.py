@@ -139,7 +139,7 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
         os.makedirs(directory)
 
     # fout = open(f'{directory}/time_Frequency_Error_Log.txt', 'wt')
-    fout = open(os.path.join('...','dataInfo','time_Frequency_Error_Log.txt'), 'a')
+    fout = open(os.path.join("..","..",'dataInfo','time_Frequency_Error_Log.txt'), 'a')
     fout.write(f"{'-'*60}\n{date}\n{'-'*60}\n")
     errors = {}
     errorCount = {}
@@ -214,7 +214,7 @@ def interpolateMissingData(data, cutOffTime, endTime, date, cutoff:int = 40, fre
     you can reduce the time frequency lower, however this can drastically increase the time it take to run the data cleaning process,
     especially with larger sets of data.
     '''
-    fout = open(os.path.join('...','dataInfo','interpolation_Effect_Log.txt'), 'a')
+    fout = open(os.path.join("..","..",'dataInfo','interpolation_Effect_Log.txt'), 'a')
     interpDF = {}
     fout.write(f"\n{date}\n\n")
 
