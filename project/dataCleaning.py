@@ -26,10 +26,10 @@ def main():
     # collect and organise all of the data then make it into nice things
     conditionDictionary = getConditions()
     # remove old logs from previous run
-    if os.path.exists(os.path.join("...","dataInfo","interpolation_Effect_Log.txt")):
-        os.remove(os.path.join("...","dataInfo","interpolation_Effect_Log.txt"))
-    if os.path.exists(os.path.join("...","dataInfo","time_Frequency_Error_Log.txt")):
-        os.remove(os.path.join("...","dataInfo","time_Frequency_Error_Log.txt"))
+    if os.path.exists(os.path.join("..","..","dataInfo","interpolation_Effect_Log.txt")):
+        os.remove(os.path.join("..","..","dataInfo","interpolation_Effect_Log.txt"))
+    if os.path.exists(os.path.join("..","..","dataInfo","time_Frequency_Error_Log.txt")):
+        os.remove(os.path.join("..","..","dataInfo","time_Frequency_Error_Log.txt"))
 
     columns = conditionDictionary["Columns"]
     particle = conditionDictionary["Particle"]
@@ -70,7 +70,7 @@ def main():
                 checkFileList.append(specificFile)
         conditionDictionary["Days"][day]["confirmedFiles"] = checkFileList
 
-        saveToCSV(os.path.join("...","proccessedData",date), data)
+        saveToCSV(os.path.join("..","..","proccessedData",date), data)
 
         logger.debug(data)
 
@@ -79,12 +79,12 @@ def main():
 
         interpDF = interpolateMissingData(
             data, cutOffTime=start, endTime=end, date=date)
-        saveToCSV(os.path.join("...","interpolatedData",date), interpDF)
+        saveToCSV(os.path.join("..","..","interpolatedData",date), interpDF)
 
         mergedDataFrame = mergeDataFrames(
             interpDF, particle, start, end)
 
-        saveToCSV(os.path.join("...","mergedData"),{f"mergedData_{date}": mergedDataFrame})
+        saveToCSV(os.path.join("..","..","mergedData"),{f"mergedData_{date}": mergedDataFrame})
 
         # Set process flag to True so that time won't be wasted processing old data
         conditionDictionary["Days"][day]["processed"] = True
