@@ -12,6 +12,9 @@ Days:
     - ../Data/A8_4_13_22.txt
     - ../Data/A7_4_13_22.txt
     - ../Data/A16_4_13_22.txt
+    - ..\Data\A16_4_13_22.txt
+    - ..\Data\A7_4_13_22.txt
+    - ..\Data\A8_4_13_22.txt
     date: 4-13-22
     filePattern:
     - ..
@@ -24,6 +27,8 @@ Days:
     - ./Data\A8_4-14-22.txt
     - ../Data/A16_4-14-22.txt
     - ../Data/A8_4-14-22.txt
+    - ..\Data\A16_4-14-22.txt
+    - ..\Data\A8_4-14-22.txt
     date: 4-14-22
     filePattern:
     - ..
@@ -38,6 +43,9 @@ Days:
     - ../Data/A7-4-15-22.txt
     - ../Data/A8-4-15-22.txt
     - ../Data/A16_4-15-22.txt
+    - ..\Data\A16_4-15-22.txt
+    - ..\Data\A7-4-15-22.txt
+    - ..\Data\A8-4-15-22.txt
     date: 4-15-22
     filePattern:
     - ..
@@ -52,6 +60,9 @@ Days:
     - ../Data/A16-4-18-22.txt
     - ../Data/A7-4-18-22.txt
     - ../Data/A8-4-18-22.txt
+    - ..\Data\A16-4-18-22.txt
+    - ..\Data\A7-4-18-22.txt
+    - ..\Data\A8-4-18-22.txt
     date: 4-18-22
     filePattern:
     - ..
@@ -66,6 +77,9 @@ Days:
     - ../Data/A16-4-19-22.txt
     - ../Data/A8-4-19-22.txt
     - ../Data/A7-4-19-22.txt
+    - ..\Data\A16-4-19-22.txt
+    - ..\Data\A7-4-19-22.txt
+    - ..\Data\A8-4-19-22.txt
     date: 4-19-22
     filePattern:
     - ..
@@ -76,6 +90,7 @@ Days:
     confirmedFiles:
     - ./Data\A16-4-20-22.txt
     - ../Data/A16-4-20-22.txt
+    - ..\Data\A16-4-20-22.txt
     date: 4-20-22
     filePattern:
     - ..
@@ -86,6 +101,8 @@ Days:
     confirmedFiles:
     - ../Data/A8-4-21-22.txt
     - ../Data/A16-4-21-22.txt
+    - ..\Data\A16-4-21-22.txt
+    - ..\Data\A8-4-21-22.txt
     date: 4-21-22
     filePattern:
     - ..

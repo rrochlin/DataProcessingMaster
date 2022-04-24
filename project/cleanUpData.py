@@ -2,9 +2,11 @@ import logging
 import pandas as pd
 import re
 import os
+import platform
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("data-cleanup")
 logger.propagate = True
+
 
 def cleanUp(cutoff, timeRectifyingParams, filePaths, columns, badTimes, date, confirmedFiles):
 
@@ -49,12 +51,15 @@ def cleanUp(cutoff, timeRectifyingParams, filePaths, columns, badTimes, date, co
         logger.debug(df)
 
         # columns have spaces in front and in between for the merged Data Time column
-        df.columns = df.columns.str.replace(" ","")
+        df.columns = df.columns.str.replace(" ", "")
 
-        # This assumes file start with ../Data\\{sensorName} followed by either "-" or "_"
-        sensorNamePattern = fr"Data{os.path.sep}[a-zA-Z]+\d+"
-        nameMatch = re.search(sensorNamePattern, file)
-        name = nameMatch[0].replace(f"Data{os.path.sep}","")
+        # This assumes file start with ../Data\\{sensorName} followed by either "-" or "_", platform specific
+        sensorNamePatternDict = {'Windows': fr"Data{os.path.sep}{os.path.sep}[a-zA-Z]+\d+",
+                                 'Linux': fr"Data{os.path.sep}[a-zA-Z]+\d+", 
+                                 'Darwin': fr"Data{os.path.sep}[a-zA-Z]+\d+"}
+        nameMatch = re.search(sensorNamePatternDict[platform.system()], file)
+        name = nameMatch[0].replace(f"Data{os.path.sep}", "")
+        print(name)
 
         logger.debug(df)
 
@@ -136,14 +141,15 @@ def fixUTCStamps(filePath, date):
      2022/4/13,  11:58:28,  3.987500,    0,       0.000000,     etc....
      2022/4/13,  11:58:38,  3.983750,    0,       0.000000,     etc....
     '''
-    charTimeStart, charTimeEnd = re.search(r",\s+\d+:\d+:\d+",content[3]).span()
+    charTimeStart, charTimeEnd = re.search(
+        r",\s+\d+:\d+:\d+", content[3]).span()
     fout = open(filePath, 'wt')
     for idx, i in enumerate(content):
         match = re.match(incorrectString, i)
         if match:
             # date should be in format MM-dd-YY, this method will work until 2100
             year = date.split('-')[-1]
-            dateStamp = match[0].replace(year,f"20{year}")
+            dateStamp = match[0].replace(year, f"20{year}")
             line = (pd.Timestamp(dateStamp+i[charTimeStart+1:charTimeEnd])-pd.Timedelta(
                 hours=offset)).strftime(' %Y/%m/%d, %H:%M:%S') + i[charTimeEnd:]
         else:
