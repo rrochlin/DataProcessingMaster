@@ -1,0 +1,26 @@
+Metadata-Version: 2.1
+Name: dataCleaning
+Version: 0.0.1
+Summary: Project for organizing and analyzing data from UW Seattle Aerospec team        particle sensors
+Home-page: https://github.com/rrochlin/DataProcessingMaster
+Author: Robert Rochlin
+Author-email: rrochling@yahoo.com
+License: UNKNOWN
+Platform: UNKNOWN
+
+# DataProcessingMaster
+Template for data processing, so we can use the same process on multiple data sets
+
+# Using this Repo
+In order to set up this repo on your local directory create a new branch to work on and clone this into the directory you are working in.
+
+# Expected file structure
+This program relies on local filepaths:
+the expectation is you will install the repo into the same directory as you have the data in text format as such:
+-ProjectFolder
+  -Data
+  -DataProcessingMaster
+  
+# Using the data processing script
+working on adding setup.py so you can just run pip install -e . to handle all dependancies
+

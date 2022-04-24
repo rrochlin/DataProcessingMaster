@@ -1,7 +1,8 @@
 import logging
 import pandas as pd
 import re
-logging.basicConfig(level=logging.INFO)
+import os
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("data-cleanup")
 logger.propagate = True
 
@@ -51,9 +52,9 @@ def cleanUp(cutoff, timeRectifyingParams, filePaths, columns, badTimes, date, co
         df.columns = df.columns.str.replace(" ","")
 
         # This assumes file start with ../Data\\{sensorName} followed by either "-" or "_"
-        sensorNamePattern = r"Data\\[a-zA-Z]+\d+"
+        sensorNamePattern = fr"Data{os.path.sep}[a-zA-Z]+\d+"
         nameMatch = re.search(sensorNamePattern, file)
-        name = nameMatch[0].replace("Data\\","")
+        name = nameMatch[0].replace(f"Data{os.path.sep}","")
 
         logger.debug(df)
 
