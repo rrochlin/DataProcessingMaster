@@ -1,4 +1,3 @@
-from msilib.schema import Directory
 import pandas as pd
 import numpy as np
 from datetime import datetime as dt
@@ -54,7 +53,9 @@ def main():
         start = f"{date.replace('-','/')} {dayStart}"
         end = f"{date.replace('-','/')} {dayEnd}"
 
-        files = glob.glob(filePattern)
+        # this is not a pointer, in python this is the splat operator. This feeds
+        # the list of arguments to os.path.join from a list
+        files = glob.glob(os.path.join(*filePattern))
         logger.info(f"filenames for {condition}:{files}")
         
         
@@ -134,7 +135,7 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
     endTime = pd.Timestamp(end)
 
 
-    directory = os.path.join('..','dataInfo')
+    directory = os.path.join('..','..','dataInfo')
     if not os.path.exists(directory):
         os.makedirs(directory)
 
