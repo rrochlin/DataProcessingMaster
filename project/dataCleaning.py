@@ -31,7 +31,7 @@ def main():
         os.remove(os.path.join("..","..","dataInfo","time_Frequency_Error_Log.txt"))
 
     columns = conditionDictionary["Columns"]
-    particle = conditionDictionary["Particle"]
+    particles = conditionDictionary["Particles"]
     sensorsWithNonPSTTime = conditionDictionary["sensorConditions"]
     dayStart = conditionDictionary["dayStart"]
     dayEnd = conditionDictionary["dayEnd"]
@@ -39,56 +39,58 @@ def main():
 
     newFilesChecked = True
 
-    for day, condition in conditionDictionary["Days"].items():
+    for particle in particles:
 
-        if not processAll:
-            if condition["processed"]:
-                logger.info(f"skipping {day}, params file indicates data is already processed")
-                continue
+        for day, condition in conditionDictionary["Days"].items():
+
+            if not processAll:
+                if condition["processed"][particle]:
+                    logger.info(f"skipping {day}, params file indicates data is already processed")
+                    continue
 
 
-        filePattern = condition["filePattern"]
-        confirmedFiles = condition["confirmedFiles"]
-        date = condition["date"]
-        start = f"{date.replace('-','/')} {dayStart}"
-        end = f"{date.replace('-','/')} {dayEnd}"
+            filePattern = condition["filePattern"]
+            confirmedFiles = condition["confirmedFiles"]
+            date = condition["date"]
+            start = f"{date.replace('-','/')} {dayStart}"
+            end = f"{date.replace('-','/')} {dayEnd}"
 
-        # this is not a pointer, in python this is the splat operator. This feeds
-        # the list of arguments to os.path.join from a list
-        files = glob.glob(os.path.join(*filePattern))
-        logger.info(f"filenames for {condition}:{files}")
-        
-        
-        data, filesChecked = cleanUp(start, sensorsWithNonPSTTime,
-                       files, columns, badTimes, date, confirmedFiles)
+            # this is not a pointer, in python this is the splat operator. This feeds
+            # the list of arguments to os.path.join from a list
+            files = glob.glob(os.path.join(*filePattern))
+            logger.info(f"filenames for {condition}:{files}")
+            
+            
+            data, filesChecked = cleanUp(start, sensorsWithNonPSTTime,
+                        files, columns, badTimes, date, confirmedFiles)
 
-        if filesChecked:
-            newFilesChecked = True
+            if filesChecked:
+                newFilesChecked = True
 
-        checkFileList = list(conditionDictionary["Days"][day]["confirmedFiles"])
-        for specificFile, check in filesChecked.items():
-            if check:
-                checkFileList.append(specificFile)
-        conditionDictionary["Days"][day]["confirmedFiles"] = checkFileList
+            checkFileList = list(conditionDictionary["Days"][day]["confirmedFiles"])
+            for specificFile, check in filesChecked.items():
+                if check:
+                    checkFileList.append(specificFile)
+            conditionDictionary["Days"][day]["confirmedFiles"] = checkFileList
 
-        saveToCSV(os.path.join("..","..","proccessedData",date), data)
+            saveToCSV(os.path.join("..","..","proccessedData",date,re.sub(r'\W','',particle)), data)
 
-        logger.debug(data)
+            logger.debug(data)
 
-        checkDataRecordingPerformance(
-            data, date, particle, start, end)
+            checkDataRecordingPerformance(
+                data, date, particle, start, end)
 
-        interpDF = interpolateMissingData(
-            data, cutOffTime=start, endTime=end, date=date)
-        saveToCSV(os.path.join("..","..","interpolatedData",date), interpDF)
+            interpDF = interpolateMissingData(
+                data, cutOffTime=start, endTime=end, date=date)
+            saveToCSV(os.path.join("..","..","interpolatedData",date,re.sub(r'\W','',particle)), interpDF)
 
-        mergedDataFrame = mergeDataFrames(
-            interpDF, particle, start, end)
+            mergedDataFrame = mergeDataFrames(
+                interpDF, particle, start, end)
 
-        saveToCSV(os.path.join("..","..","mergedData"),{f"mergedData_{date}": mergedDataFrame})
+            saveToCSV(os.path.join("..","..","mergedData",re.sub(r'\W','',particle)),{f"mergedData_{date}": mergedDataFrame})
 
-        # Set process flag to True so that time won't be wasted processing old data
-        conditionDictionary["Days"][day]["processed"] = True
+            # Set process flag to True so that time won't be wasted processing old data
+            conditionDictionary["Days"][day]["processed"][particle] = True
 
     if newFilesChecked:
         logger.info("overwriting yaml parameter file with new params")
@@ -155,6 +157,7 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
         counter = 0
         # filter the data frame to include only the values we care about
         temp = data[x][(data[x]["Date_Time"]>startTime) & (data[x]["Date_Time"]<endTime)]
+
         for idx, time in enumerate(temp['Date_Time']):
             try:
                 test = (temp['Date_Time'][idx+1] - time) <= pd.Timedelta(seconds=interval)
@@ -168,41 +171,46 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
                     counter += 1
             except:
                 continue
+        if not temp.empty:
+            timeDeltaStart = pd.Timedelta(seconds = 0)
+            timeDeltaEnd = pd.Timedelta(seconds = 0)
+            if temp["Date_Time"].iloc[0] > startTime:
+                timeDeltaStart = temp["Date_Time"].iloc[0] - startTime
+            if temp["Date_Time"].iloc[-1] < endTime:
+                timeDeltaEnd = endTime - temp["Date_Time"].iloc[-1]
+            timeDeltaDuring = sum([pd.Timedelta(seconds = int(time))*amount for time,amount in errorCount[x].items()], pd.Timedelta(seconds = 0))
+            totalTimeLost = timeDeltaDuring+timeDeltaEnd+timeDeltaStart
+    
+            percentZero = round(
+                sum([1 if i == 0 else 0 for i in temp[particle]])/len(temp[particle]), 2)
+            # logger.exception(data)
+            # display the different types of errors
+            listOfErrors = [i.seconds for i in errors[x]]
+            autoFrmt = [f"{{:>{round(math.log(error+1,10))+2}}}"if error>10**3 else "{:>4}" for error in listOfErrors]
+            frmt = "".join(autoFrmt)
 
-        timeDeltaStart = pd.Timedelta(seconds = 0)
-        timeDeltaEnd = pd.Timedelta(seconds = 0)
-        if temp["Date_Time"].iloc[0] > startTime:
-            timeDeltaStart = temp["Date_Time"].iloc[0] - startTime
-        if temp["Date_Time"].iloc[-1] < endTime:
-            timeDeltaEnd = endTime - temp["Date_Time"].iloc[-1]
-        timeDeltaDuring = sum([pd.Timedelta(seconds = int(time))*amount for time,amount in errorCount[x].items()], pd.Timedelta(seconds = 0))
-        totalTimeLost = timeDeltaDuring+timeDeltaEnd+timeDeltaStart
+            # display the quantity of each type of error
+            listOfErrorQuantity = [errorCount[x][str(i.seconds)] for i in errors[x]]
 
-        
-        percentZero = round(
-            sum([1 if i == 0 else 0 for i in temp[particle]])/len(temp[particle]), 2)
-        # logger.exception(data)
-        # display the different types of errors
-        listOfErrors = [i.seconds for i in errors[x]]
-        autoFrmt = [f"{{:>{round(math.log(error+1,10))+2}}}"if error>10**3 else "{:>4}" for error in listOfErrors]
-        frmt = "".join(autoFrmt)
+            logger.info(f"{x}: counter:{counter}, temp: {len(temp)}")
+            logger.info(f" {str(round(counter/len(temp)*100,2))}% of data set is over {interval} second recording intervals")
+            logger.info(frmt.format(*listOfErrors))
+            logger.info(frmt.format(*listOfErrorQuantity))
+            logString =f"{x}\n"
+            logString+=f" {round(totalTimeLost/(endTime - startTime)*100,2)}%  Time lost -- Total Time Lost : {totalTimeLost}\n"
+            logString+=f" {str(round(counter/len(temp)*100, 2))}% of data set is over {interval} second recording intervals\n"
+            logString+=f' {percentZero*100}% of data set is 0 for paricle size : {particle}\n'
+            logString+=f" during: {timeDeltaDuring}\n start: {timeDeltaStart}\n end: {timeDeltaEnd}\n"
+            logString+=f" Time Errors {frmt.format(*listOfErrors)}\n"
+            logString+=f" # Observed {frmt.format(*listOfErrorQuantity)}\n"
+            fout.write(logString)
+            fout.write('\n')
 
-        # display the quantity of each type of error
-        listOfErrorQuantity = [errorCount[x][str(i.seconds)] for i in errors[x]]
-
-        logger.info(f"{x}: counter:{counter}, temp: {len(temp)}")
-        logger.info(f" {str(round(counter/len(temp)*100,2))}% of data set is over {interval} second recording intervals")
-        logger.info(frmt.format(*listOfErrors))
-        logger.info(frmt.format(*listOfErrorQuantity))
-        logString =f"{x}\n"
-        logString+=f" {round(totalTimeLost/(endTime - startTime)*100,2)}%  Time lost -- Total Time Lost : {totalTimeLost}\n"
-        logString+=f" {str(round(counter/len(temp)*100, 2))}% of data set is over {interval} second recording intervals\n"
-        logString+=f' {percentZero*100}% of data set is 0 for paricle size : {particle}\n'
-        logString+=f" during: {timeDeltaDuring}\n start: {timeDeltaStart}\n end: {timeDeltaEnd}\n"
-        logString+=f" Time Errors {frmt.format(*listOfErrors)}\n"
-        logString+=f" # Observed {frmt.format(*listOfErrorQuantity)}\n"
-        fout.write(logString)
-        fout.write('\n')
+        else:
+            totalTimeLost = timeDeltaEnd-timeDeltaStart
+            logger.info(f"no data was found in time range for {x}")
+            fout.write(f"no data was found in time range for {x}\n")
+            fout.write('\n')
 
     fout.close()
     return
