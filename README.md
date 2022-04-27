@@ -5,11 +5,11 @@ Template for data processing, so we can use the same process on multiple data se
 In order to set up this repo on your local directory create a new branch to work on and clone this into the directory you are working in.
 
 # Expected file structure
-|-ProjectFolder                 <---- this is an overarching file to contain the files this project will produce
-|--DataProcessingMaster         <---- this is the repo you will clone
-|----Data                       <---- folder containing all raw data to access
-|-------data1.txt
-|-------data2.txt etc.
+|-ProjectFolder                 <---- this is an overarching file to contain the files this project will produce\
+|--DataProcessingMaster         <---- this is the repo you will clone\
+|----Data                       <---- folder containing all raw data to access\
+|-------data1.txt\
+|-------data2.txt etc.\
 |----project
 |-------__init__.py             <---- left blank
 |-------Analysis.ipynb          <---- starter template for jupyter notebook analysis
