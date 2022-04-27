@@ -37,8 +37,6 @@ def main():
     dayEnd = conditionDictionary["dayEnd"]
     processAll = conditionDictionary["processAll"]
 
-    newFilesChecked = True
-
     for particle in particles:
 
         for day, condition in conditionDictionary["Days"].items():

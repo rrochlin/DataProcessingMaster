@@ -12,7 +12,7 @@ dependencies = ["pandas", "numpy", "jupyter", "pyyaml", "matplotlib", "scikit-le
 
 setup(
     name = "dataCleaning",
-    version = "0.0.1",
+    version = "0.0.5",
     author = "Robert Rochlin",
     author_email = "rrochling@yahoo.com",
     install_requires = dependencies,
