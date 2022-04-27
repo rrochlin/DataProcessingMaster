@@ -16,6 +16,7 @@ Days:
     - '*4_13_22.txt'
     processed:
       Dp>0.3: true
+      PM1_Std: true
       PM2.5_Std: true
   4-14-22:
     confirmedFiles:
@@ -28,6 +29,7 @@ Days:
     - '*4-14-22.txt'
     processed:
       Dp>0.3: true
+      PM1_Std: true
       PM2.5_Std: true
   4-15-22:
     confirmedFiles:
@@ -41,6 +43,7 @@ Days:
     - '*4-15-22.txt'
     processed:
       Dp>0.3: true
+      PM1_Std: true
       PM2.5_Std: true
   4-18-22:
     confirmedFiles:
@@ -54,6 +57,7 @@ Days:
     - '*4-18-22.txt'
     processed:
       Dp>0.3: true
+      PM1_Std: true
       PM2.5_Std: true
   4-19-22:
     confirmedFiles:
@@ -67,6 +71,7 @@ Days:
     - '*4-19-22.txt'
     processed:
       Dp>0.3: true
+      PM1_Std: true
       PM2.5_Std: true
   4-20-22:
     confirmedFiles:
@@ -78,6 +83,7 @@ Days:
     - '*4-20-22.txt'
     processed:
       Dp>0.3: true
+      PM1_Std: true
       PM2.5_Std: true
   4-21-22:
     confirmedFiles:
@@ -91,6 +97,7 @@ Days:
     - '*4-21-22.txt'
     processed:
       Dp>0.3: true
+      PM1_Std: true
       PM2.5_Std: true
   4-22-22:
     confirmedFiles:
@@ -104,6 +111,7 @@ Days:
     - '*4-22-22.txt'
     processed:
       Dp>0.3: true
+      PM1_Std: true
       PM2.5_Std: true
 Particles:
 - Dp>0.3
