@@ -120,3 +120,19 @@ dayEnd: '17:00'
 dayStart: '10:00'
 processAll: false
 sensorConditions: {}
+
+
+
+|--DataProcessingMaster         <---- this is the repo you will clone\
+|----Data                       <---- folder containing all raw data to access\
+|-------data1.txt\
+|-------data2.txt etc.\
+|----project\
+|-------__init__.py             <---- left blank\
+|-------Analysis.ipynb          <---- starter template for jupyter notebook analysis\
+|-------cleanUpData.py          <---- modules for dataCleaning.py. handles ingensting and fixing raw data\
+|-------dataCleaning.py         <---- base script to run. handles calling cleanUp from cleanUpData.py and parsing yaml params\
+|-------dataCleaningParams.yaml <---- parameter file for adjusting settings of the script\
+|-------fillDataFrame.py        <---- handles linearly interpolating or 0 padding data to get us high resolution data\
+|----README.md                  <---- this is where you are now\
+|----setup.py                   <---- package info, don't touch\
