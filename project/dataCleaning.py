@@ -44,9 +44,13 @@ def main():
         for day, condition in conditionDictionary["Days"].items():
 
             if not processAll:
-                if condition["processed"][particle]:
-                    logger.info(f"skipping {day}, params file indicates data is already processed")
-                    continue
+                try:
+                    if condition["processed"][particle]:
+                        logger.info(f"skipping {day}, params file indicates data is already processed")
+                        continue
+                except KeyError:
+                    logger.info(f"for {day}, {particle} was not set in processed dict")
+                    pass
 
 
             filePattern = condition["filePattern"]
@@ -63,9 +67,6 @@ def main():
             
             data, filesChecked = cleanUp(start, sensorsWithNonPSTTime,
                         files, columns, badTimes, date, confirmedFiles)
-
-            if filesChecked:
-                newFilesChecked = True
 
             checkFileList = list(conditionDictionary["Days"][day]["confirmedFiles"])
             for specificFile, check in filesChecked.items():
@@ -92,7 +93,7 @@ def main():
             # Set process flag to True so that time won't be wasted processing old data
             conditionDictionary["Days"][day]["processed"][particle] = True
 
-    if newFilesChecked:
+    if not (conditionDictionary == getConditions()):
         logger.info("overwriting yaml parameter file with new params")
         with open('dataCleaningParams.yaml', 'w') as outfile:
             yaml.dump(conditionDictionary, outfile, default_flow_style=False)
