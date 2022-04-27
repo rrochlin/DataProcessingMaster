@@ -147,9 +147,10 @@ def fixUTCStamps(filePath, date):
     for idx, i in enumerate(content):
         match = re.match(incorrectString, i)
         if match:
-            # date should be in format MM-dd-YY, this method will work until 2100
+            # TODO fix this, A7-4-21-22 shows whats happening. This deletes all that data
+            # date should be in format YY-MM-dd, this method will work until 2100
             year = date.split('-')[-1]
-            dateStamp = match[0].replace(year, f"20{year}")
+            dateStamp = match[0].replace(rf"{year}$", f"20{year}")
             line = (pd.Timestamp(dateStamp+i[charTimeStart+1:charTimeEnd])-pd.Timedelta(
                 hours=offset)).strftime(' %Y/%m/%d, %H:%M:%S') + i[charTimeEnd:]
         else:
