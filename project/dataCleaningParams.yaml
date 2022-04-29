@@ -115,8 +115,8 @@ Days:
     - Data
     - '*4-26-22.txt'
     processed:
-      Dp>0.3: true
-      PM2.5_Std: true
+      Dp>0.3: false
+      PM2.5_Std: false
   4-27-22:
     confirmedFiles:
     - ..\Data\A8-4-27-22.txt

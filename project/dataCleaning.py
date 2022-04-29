@@ -11,7 +11,6 @@ import math
 from fillDataFrame import fillDf
 from cleanUpData import cleanUp
 
-
 dirname = os.path.dirname(__file__)
 dataInfoPath = os.path.join(dirname,"..","..","dataInfo")
 if not os.path.exists(os.path.join(dataInfoPath)):

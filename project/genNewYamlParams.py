@@ -8,8 +8,13 @@ import re
 dirname = os.path.dirname(__file__)
 if not os.path.exists(os.path.join(dirname,"..","..","dataInfo")):
     os.mkdir(os.path.join(dirname,"..","..","dataInfo"))
-logging.basicConfig(filename=os.path.join(dirname,"..","..","dataInfo","yamlGenLog.log"), level=logging.INFO)
-logger = logging.getLogger("data-cleaning")
+logging.basicConfig(
+    filename=os.path.join(dirname,"..","..","dataInfo","yamlGenLog.log"),
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S',
+    force = True)
+logger = logging.getLogger("genYamlParams")
 logger.propagate = True
 
 
