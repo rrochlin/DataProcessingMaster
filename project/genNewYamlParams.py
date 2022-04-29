@@ -21,7 +21,6 @@ def main():
     missingDates = [dataDate for dataDate in datesInData if dataDate not in datesInYaml]
     if missingDates:
         missingObjects = [genSampleObj(date) for date in missingDates]
-        # print(missingObjects)
         logger.info(f"dates added to yaml: {missingDates}")
         for obj in missingObjects:
             conditionDictionary["Days"].update(obj)

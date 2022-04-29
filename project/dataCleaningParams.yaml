@@ -105,10 +105,32 @@ Days:
       Dp>0.3: true
       PM1_Std: true
       PM2.5_Std: true
+  4-26-22:
+    confirmedFiles:
+    - ..\Data\A16-4-26-22.txt
+    - ..\Data\A7-4-26-22.txt
+    - ..\Data\A8-4-26-22.txt
+    filePattern:
+    - ..
+    - Data
+    - '*4-26-22.txt'
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
+  4-27-22:
+    confirmedFiles:
+    - ..\Data\A8-4-27-22.txt
+    filePattern:
+    - ..
+    - Data
+    - '*4-27-22.txt'
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
 Particles:
 - Dp>0.3
 - PM2.5_Std
-dayEnd: '17:00'
-dayStart: '10:00'
+dayEnd: '20:00'
+dayStart: '8:00'
 processAll: false
 sensorConditions: {}

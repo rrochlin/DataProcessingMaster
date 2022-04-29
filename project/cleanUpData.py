@@ -3,6 +3,7 @@ import pandas as pd
 import re
 import os
 import platform
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("data-cleanup")
 logger.propagate = True
@@ -59,7 +60,6 @@ def cleanUp(cutoff, timeRectifyingParams, filePaths, columns, badTimes, date, co
                                  'Darwin': fr"Data{os.path.sep}[a-zA-Z]+\d+"}
         nameMatch = re.search(sensorNamePatternDict[platform.system()], file)
         name = nameMatch[0].replace(f"Data{os.path.sep}", "")
-        print(name)
 
         logger.debug(df)
 
