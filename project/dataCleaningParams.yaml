@@ -4,12 +4,57 @@ Columns:
 - 6
 - 13
 Days:
+  4-13-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*4-13-22.txt'
+    processed: {}
+  4-14-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*4-14-22.txt'
+    processed: {}
+  4-15-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*4-15-22.txt'
+    processed: {}
+  4-18-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*4-18-22.txt'
+    processed: {}
+  4-19-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*4-19-22.txt'
+    processed: {}
+  4-20-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*4-20-22.txt'
+    processed: {}
   MM-dd-YY:
     confirmedFiles: []
-    filePattern: ['..','Data','*4_13_22.txt']
+    filePattern:
+    - ..
+    - Data
+    - '*4_13_22.txt'
     processed:
-        Dp>0.3: true
-        PM2.5_Std: true
+      Dp>0.3: true
+      PM2.5_Std: true
 Particles:
 - Dp>0.3
 - PM2.5_Std
