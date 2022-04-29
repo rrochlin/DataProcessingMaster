@@ -15,6 +15,7 @@ def cleanUp(cutoff, timeRectifyingParams, filePaths, columns, badTimes, date, co
     mod = {}
     cleaningCutOffTime = pd.Timestamp(cutoff)
     filesChecked = {}
+    logger.debug(f"{cutoff}, {timeRectifyingParams}, {filePaths}, {columns}, {badTimes}, {date}, {confirmedFiles}")
     for idx, file in enumerate(filePaths):
         logger.debug(f"filename: {file}")
         # This function will fix utc timestamp errors
@@ -125,7 +126,6 @@ def fixUTCStamps(filePath, date):
     if not in PST change the offset
     '''
     offset = 7
-    incorrectString = r"   \d{2}/\d+/\d+"
     fin = open(filePath, 'rt')
     content = fin.readlines()
     fin.close()
@@ -141,18 +141,21 @@ def fixUTCStamps(filePath, date):
      2022/4/13,  11:58:28,  3.987500,    0,       0.000000,     etc....
      2022/4/13,  11:58:38,  3.983750,    0,       0.000000,     etc....
     '''
+
     charTimeStart, charTimeEnd = re.search(
         r",\s+\d+:\d+:\d+", content[3]).span()
+
     fout = open(filePath, 'wt')
+    incorrectString = r"   \d{2}/\d+/\d+"
     for idx, i in enumerate(content):
         match = re.match(incorrectString, i)
         if match:
             # TODO fix this, A7-4-21-22 shows whats happening. This deletes all that data
             # date should be in format YY-MM-dd, this method will work until 2100
             year = date.split('-')[-1]
-            dateStamp = match[0].replace(rf"{year}$", f"20{year}")
+            dateStamp = match[0].replace(rf"   {year}", f" 20{year}")
             line = (pd.Timestamp(dateStamp+i[charTimeStart+1:charTimeEnd])-pd.Timedelta(
-                hours=offset)).strftime(' %Y/%m/%d, %H:%M:%S') + i[charTimeEnd:]
+                hours=offset)).strftime('%Y/%m/%d,  %H:%M:%S') + i[charTimeEnd:]
         else:
             line = i
         fout.write(line)

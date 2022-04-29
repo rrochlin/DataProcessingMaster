@@ -20,7 +20,7 @@ logger.propagate = True
 
 def main():
     conditionDictionary = getConditions()
-    allFiles = ' '.join(glob.glob(os.path.join('..','Data',"*.txt")))
+    allFiles = ' '.join(glob.glob(os.path.join(dirname,'..','Data',"*.txt")))
     datePattern = r"(?<=-)\d{1,2}\S\d{1,2}\S\d{1,2}|(?<=_)\d{1,2}\S\d{1,2}\S\d{1,2}"
     datesInData = {match.replace("_","-") for match in re.findall(datePattern,allFiles)}
     datesInYaml = set(conditionDictionary["Days"].keys())

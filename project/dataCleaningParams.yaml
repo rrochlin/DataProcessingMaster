@@ -15,37 +15,34 @@ Days:
     - '*4_13_22.txt'
     processed:
       Dp>0.3: true
-      PM1_Std: true
       PM2.5_Std: true
   4-14-22:
     confirmedFiles:
-    - ..\Data\A16_4-14-22.txt
     - ..\Data\A8_4-14-22.txt
+    - ..\Data\A16_4-14-22.txt
     filePattern:
     - ..
     - Data
     - '*4-14-22.txt'
     processed:
       Dp>0.3: true
-      PM1_Std: true
       PM2.5_Std: true
   4-15-22:
     confirmedFiles:
-    - ..\Data\A16_4-15-22.txt
     - ..\Data\A7-4-15-22.txt
     - ..\Data\A8-4-15-22.txt
+    - ..\Data\A16_4-15-22.txt
     filePattern:
     - ..
     - Data
     - '*4-15-22.txt'
     processed:
       Dp>0.3: true
-      PM1_Std: true
       PM2.5_Std: true
   4-18-22:
     confirmedFiles:
-    - ..\Data\A16-4-18-22.txt
     - ..\Data\A7-4-18-22.txt
+    - ..\Data\A16-4-18-22.txt
     - ..\Data\A8-4-18-22.txt
     filePattern:
     - ..
@@ -53,20 +50,18 @@ Days:
     - '*4-18-22.txt'
     processed:
       Dp>0.3: true
-      PM1_Std: true
       PM2.5_Std: true
   4-19-22:
     confirmedFiles:
-    - ..\Data\A16-4-19-22.txt
     - ..\Data\A7-4-19-22.txt
     - ..\Data\A8-4-19-22.txt
+    - ..\Data\A16-4-19-22.txt
     filePattern:
     - ..
     - Data
     - '*4-19-22.txt'
     processed:
       Dp>0.3: true
-      PM1_Std: true
       PM2.5_Std: true
   4-20-22:
     confirmedFiles:
@@ -77,25 +72,23 @@ Days:
     - '*4-20-22.txt'
     processed:
       Dp>0.3: true
-      PM1_Std: true
       PM2.5_Std: true
   4-21-22:
     confirmedFiles:
-    - ..\Data\A16-4-21-22.txt
     - ..\Data\A8-4-21-22.txt
     - ..\Data\A7-4-21-22.txt
+    - ..\Data\A16-4-21-22.txt
     filePattern:
     - ..
     - Data
     - '*4-21-22.txt'
     processed:
       Dp>0.3: true
-      PM1_Std: true
       PM2.5_Std: true
   4-22-22:
     confirmedFiles:
-    - ..\Data\A16-4-22-22.txt
     - ..\Data\A7-4-22-22.txt
+    - ..\Data\A16-4-22-22.txt
     - ..\Data\A8-4-22-22.txt
     filePattern:
     - ..
@@ -103,13 +96,12 @@ Days:
     - '*4-22-22.txt'
     processed:
       Dp>0.3: true
-      PM1_Std: true
       PM2.5_Std: true
   4-26-22:
     confirmedFiles:
+    - ..\Data\A8-4-26-22.txt
     - ..\Data\A16-4-26-22.txt
     - ..\Data\A7-4-26-22.txt
-    - ..\Data\A8-4-26-22.txt
     filePattern:
     - ..
     - Data

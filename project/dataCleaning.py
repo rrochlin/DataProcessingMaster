@@ -12,7 +12,7 @@ from fillDataFrame import fillDf
 from cleanUpData import cleanUp
 
 dirname = os.path.dirname(__file__)
-dataInfoPath = os.path.join(dirname,"..","..","dataInfo")
+dataInfoPath = os.path.join(dirname, "..", "..", "dataInfo")
 if not os.path.exists(os.path.join(dataInfoPath)):
     os.mkdir(os.path.join(dataInfoPath))
 logging.basicConfig(
@@ -20,7 +20,7 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S',
-    force = True)
+    force=True)
 logger = logging.getLogger("data-cleaning")
 logger.propagate = True
 
@@ -34,10 +34,10 @@ def main():
     # collect and organise all of the data then make it into nice things
     conditionDictionary = getConditions()
     # remove old logs from previous run
-    if os.path.exists(os.path.join(dataInfoPath,"interpolation_Effect_Log.txt")):
-        os.remove(os.path.join(dataInfoPath,"interpolation_Effect_Log.txt"))
-    if os.path.exists(os.path.join(dataInfoPath,"time_Frequency_Error_Log.txt")):
-        os.remove(os.path.join(dataInfoPath,"time_Frequency_Error_Log.txt"))
+    if os.path.exists(os.path.join(dataInfoPath, "interpolation_Effect_Log.txt")):
+        os.remove(os.path.join(dataInfoPath, "interpolation_Effect_Log.txt"))
+    if os.path.exists(os.path.join(dataInfoPath, "time_Frequency_Error_Log.txt")):
+        os.remove(os.path.join(dataInfoPath, "time_Frequency_Error_Log.txt"))
 
     columns = conditionDictionary["Columns"]
     particles = conditionDictionary["Particles"]
@@ -53,34 +53,36 @@ def main():
             if not processAll:
                 try:
                     if condition["processed"][particle]:
-                        logger.info(f"skipping {date}, params file indicates data is already processed")
+                        logger.info(
+                            f"skipping {date}, params file indicates data is already processed")
                         continue
                 except KeyError:
-                    logger.info(f"for {date}, {particle} was not set in processed dict")
+                    logger.info(
+                        f"for {date}, {particle} was not set in processed dict")
                     pass
 
-
             filePattern = condition["filePattern"]
-            confirmedFiles = condition["confirmedFiles"]
+            confirmedFiles = [os.path.join(dirname,file) for file in condition["confirmedFiles"]]
             start = f"{date.replace('-','/')} {dayStart}"
             end = f"{date.replace('-','/')} {dayEnd}"
 
             # this is not a pointer, in python this is the splat operator. This feeds
             # the list of arguments to os.path.join from a list
-            files = glob.glob(os.path.join(*filePattern))
+            files = glob.glob(os.path.join(dirname,*filePattern))
             logger.info(f"filenames for {condition}:{files}")
-            
-            
-            data, filesChecked = cleanUp(start, sensorsWithNonPSTTime,
-                        files, columns, badTimes, date, confirmedFiles)
 
-            checkFileList = list(conditionDictionary["Days"][date]["confirmedFiles"])
+            data, filesChecked = cleanUp(start, sensorsWithNonPSTTime,
+                                         files, columns, badTimes, date, confirmedFiles)
+
+            checkFileList = set(
+                conditionDictionary["Days"][date]["confirmedFiles"])
             for specificFile, check in filesChecked.items():
                 if check:
-                    checkFileList.append(specificFile)
-            conditionDictionary["Days"][date]["confirmedFiles"] = checkFileList
+                    checkFileList.add(specificFile.replace(f"{dirname}{os.path.sep}",''))
+            conditionDictionary["Days"][date]["confirmedFiles"] = list(checkFileList)
 
-            saveToCSV(os.path.join(dirname,"..","..","proccessedData",date,re.sub(r'\W','',particle)), data)
+            saveToCSV(os.path.join(dirname, "..", "..", "proccessedData",
+                      date, re.sub(r'\W', '', particle)), data)
 
             logger.debug(data)
 
@@ -89,19 +91,20 @@ def main():
 
             interpDF = interpolateMissingData(
                 data, cutOffTime=start, endTime=end, date=date)
-            saveToCSV(os.path.join(dirname,"..","..","interpolatedData",date,re.sub(r'\W','',particle)), interpDF)
+            saveToCSV(os.path.join(dirname, "..", "..", "interpolatedData",
+                      date, re.sub(r'\W', '', particle)), interpDF)
 
-            mergedDataFrame = mergeDataFrames(
-                interpDF, particle, start, end)
+            mergedDataFrame = mergeDataFrames(interpDF, particle)
 
-            saveToCSV(os.path.join(dirname,"..","..","mergedData",re.sub(r'\W','',particle)),{f"mergedData_{date}": mergedDataFrame})
+            saveToCSV(os.path.join(dirname, "..", "..", "mergedData", re.sub(
+                r'\W', '', particle)), {f"mergedData_{date}": mergedDataFrame})
 
             # Set process flag to True so that time won't be wasted processing old data
             conditionDictionary["Days"][date]["processed"][particle] = True
 
     if not (conditionDictionary == getConditions()):
         logger.info("overwriting yaml parameter file with new params")
-        with open(os.path.join(dirname,"dataCleaningParams.yaml"), 'w') as outfile:
+        with open(os.path.join(dirname, "dataCleaningParams.yaml"), 'w') as outfile:
             yaml.dump(conditionDictionary, outfile, default_flow_style=False)
     return
 
@@ -111,7 +114,7 @@ def getConditions():
     yaml file should contain the specific variables for the data cleaning:
     filePattern, sensorConditions, columns, DataChecking, preCursorFactor, particle
     '''
-    with open(os.path.join(dirname,"dataCleaningParams.yaml"), "r") as stream:
+    with open(os.path.join(dirname, "dataCleaningParams.yaml"), "r") as stream:
         try:
             allConditions = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
@@ -143,12 +146,12 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
     startTime = pd.Timestamp(start)
     endTime = pd.Timestamp(end)
 
-
     directory = os.path.join(dataInfoPath)
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    fout = open(os.path.join(dataInfoPath,'time_Frequency_Error_Log.txt'), 'a')
+    fout = open(os.path.join(
+        dataInfoPath, 'time_Frequency_Error_Log.txt'), 'a')
     fout.write(f"{'-'*60}\n{date}\n{'-'*60}\n")
     errors = {}
     errorCount = {}
@@ -162,11 +165,13 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
         # counter keeps track of the total time interval errors per sensor
         counter = 0
         # filter the data frame to include only the values we care about
-        temp = data[x][(data[x]["Date_Time"]>startTime) & (data[x]["Date_Time"]<endTime)]
+        temp = data[x][(data[x]["Date_Time"] > startTime)
+                       & (data[x]["Date_Time"] < endTime)]
 
         for idx, time in enumerate(temp['Date_Time']):
             try:
-                test = (temp['Date_Time'][idx+1] - time) <= pd.Timedelta(seconds=interval)
+                test = (temp['Date_Time'][idx+1] -
+                        time) <= pd.Timedelta(seconds=interval)
                 if not test:
                     timeErr = temp['Date_Time'][idx+1] - time
                     if str(timeErr.seconds) in errorCount[x]:
@@ -178,37 +183,41 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
             except:
                 continue
         if not temp.empty:
-            timeDeltaStart = pd.Timedelta(seconds = 0)
-            timeDeltaEnd = pd.Timedelta(seconds = 0)
+            timeDeltaStart = pd.Timedelta(seconds=0)
+            timeDeltaEnd = pd.Timedelta(seconds=0)
             if temp["Date_Time"].iloc[0] > startTime:
                 timeDeltaStart = temp["Date_Time"].iloc[0] - startTime
             if temp["Date_Time"].iloc[-1] < endTime:
                 timeDeltaEnd = endTime - temp["Date_Time"].iloc[-1]
-            timeDeltaDuring = sum([pd.Timedelta(seconds = int(time))*amount for time,amount in errorCount[x].items()], pd.Timedelta(seconds = 0))
+            timeDeltaDuring = sum([pd.Timedelta(seconds=int(
+                time))*amount for time, amount in errorCount[x].items()], pd.Timedelta(seconds=0))
             totalTimeLost = timeDeltaDuring+timeDeltaEnd+timeDeltaStart
-    
+
             percentZero = round(
                 sum([1 if i == 0 else 0 for i in temp[particle]])/len(temp[particle]), 2)
             # logger.exception(data)
             # display the different types of errors
             listOfErrors = [i.seconds for i in errors[x]]
-            autoFrmt = [f"{{:>{round(math.log(error+1,10))+2}}}"if error>10**3 else "{:>4}" for error in listOfErrors]
+            autoFrmt = [f"{{:>{round(math.log(error+1,10))+2}}}"if error >
+                        10**3 else "{:>4}" for error in listOfErrors]
             frmt = "".join(autoFrmt)
 
             # display the quantity of each type of error
-            listOfErrorQuantity = [errorCount[x][str(i.seconds)] for i in errors[x]]
+            listOfErrorQuantity = [errorCount[x]
+                                   [str(i.seconds)] for i in errors[x]]
 
             logger.info(f"{x}: counter:{counter}, temp: {len(temp)}")
-            logger.info(f" {str(round(counter/len(temp)*100,2))}% of data set is over {interval} second recording intervals")
+            logger.info(
+                f" {str(round(counter/len(temp)*100,2))}% of data set is over {interval} second recording intervals")
             logger.info(frmt.format(*listOfErrors))
             logger.info(frmt.format(*listOfErrorQuantity))
-            logString =f"{x}\n"
-            logString+=f" {round(totalTimeLost/(endTime - startTime)*100,2)}%  Time lost -- Total Time Lost : {totalTimeLost}\n"
-            logString+=f" {str(round(counter/len(temp)*100, 2))}% of data set is over {interval} second recording intervals\n"
-            logString+=f' {percentZero*100}% of data set is 0 for paricle size : {particle}\n'
-            logString+=f" during: {timeDeltaDuring}\n start: {timeDeltaStart}\n end: {timeDeltaEnd}\n"
-            logString+=f" Time Errors {frmt.format(*listOfErrors)}\n"
-            logString+=f" # Observed {frmt.format(*listOfErrorQuantity)}\n"
+            logString = f"{x}\n"
+            logString += f" {round(totalTimeLost/(endTime - startTime)*100,2)}%  Time lost -- Total Time Lost : {totalTimeLost}\n"
+            logString += f" {str(round(counter/len(temp)*100, 2))}% of data set is over {interval} second recording intervals\n"
+            logString += f' {percentZero*100}% of data set is 0 for paricle size : {particle}\n'
+            logString += f" during: {timeDeltaDuring}\n start: {timeDeltaStart}\n end: {timeDeltaEnd}\n"
+            logString += f" Time Errors {frmt.format(*listOfErrors)}\n"
+            logString += f" # Observed {frmt.format(*listOfErrorQuantity)}\n"
             fout.write(logString)
             fout.write('\n')
 
@@ -222,17 +231,17 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
     return
 
 
-def interpolateMissingData(data, cutOffTime, endTime, date, cutoff:int = 40, freq:str = '10s'):
+def interpolateMissingData(data, cutOffTime, endTime, date, cutoff: int = 40, freq: str = '10s'):
     '''
     takes in a dictionary object {data} with n pandas data frames as values. then handles calling fillDf
     with the specified parameter to interpolate the data. defualt set to 10 second intervals and won't interpolate data over 40 seconds
     you can reduce the time frequency lower, however this can drastically increase the time it take to run the data cleaning process,
     especially with larger sets of data.
     '''
-    fout = open(os.path.join(dataInfoPath,'interpolation_Effect_Log.txt'), 'a')
+    fout = open(os.path.join(
+        dataInfoPath, 'interpolation_Effect_Log.txt'), 'a')
     interpDF = {}
     fout.write(f"\n{date}\n\n")
-
     for x in data:
         df = data[x]
         try:
@@ -241,13 +250,13 @@ def interpolateMissingData(data, cutOffTime, endTime, date, cutoff:int = 40, fre
             logger.info(f"{x}     {accuracy}")
             fout.write(f"{x}\n{accuracy[0]}\n{accuracy[1]}\n{accuracy[2]}\n\n")
         except IndexError:
-            logger.exception(f"{x} NO DATA")
-            fout.write(f"{x} NO DATA\n")
+            logger.exception(f"{x} NO DATA FOR DATE: {date}")
+            fout.write(f"{x} NO DATA FOR DATE: {date}\n")
     fout.close()
     return interpDF
 
 
-def mergeDataFrames(interpDF, particle, start, end):
+def mergeDataFrames(interpDF, particle):
 
     length_list = []
     for x in interpDF:
