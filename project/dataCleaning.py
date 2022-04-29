@@ -11,7 +11,7 @@ import math
 from fillDataFrame import fillDf
 from cleanUpData import cleanUp
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename=os.path.join("..","..","dataInfo","fullLog.log"), level=logging.INFO)
 logger = logging.getLogger("data-cleaning")
 logger.propagate = True
 
@@ -39,21 +39,20 @@ def main():
 
     for particle in particles:
 
-        for day, condition in conditionDictionary["Days"].items():
+        for date, condition in conditionDictionary["Days"].items():
 
             if not processAll:
                 try:
                     if condition["processed"][particle]:
-                        logger.info(f"skipping {day}, params file indicates data is already processed")
+                        logger.info(f"skipping {date}, params file indicates data is already processed")
                         continue
                 except KeyError:
-                    logger.info(f"for {day}, {particle} was not set in processed dict")
+                    logger.info(f"for {date}, {particle} was not set in processed dict")
                     pass
 
 
             filePattern = condition["filePattern"]
             confirmedFiles = condition["confirmedFiles"]
-            date = condition["date"]
             start = f"{date.replace('-','/')} {dayStart}"
             end = f"{date.replace('-','/')} {dayEnd}"
 
@@ -66,11 +65,11 @@ def main():
             data, filesChecked = cleanUp(start, sensorsWithNonPSTTime,
                         files, columns, badTimes, date, confirmedFiles)
 
-            checkFileList = list(conditionDictionary["Days"][day]["confirmedFiles"])
+            checkFileList = list(conditionDictionary["Days"][date]["confirmedFiles"])
             for specificFile, check in filesChecked.items():
                 if check:
                     checkFileList.append(specificFile)
-            conditionDictionary["Days"][day]["confirmedFiles"] = checkFileList
+            conditionDictionary["Days"][date]["confirmedFiles"] = checkFileList
 
             saveToCSV(os.path.join("..","..","proccessedData",date,re.sub(r'\W','',particle)), data)
 
@@ -89,7 +88,7 @@ def main():
             saveToCSV(os.path.join("..","..","mergedData",re.sub(r'\W','',particle)),{f"mergedData_{date}": mergedDataFrame})
 
             # Set process flag to True so that time won't be wasted processing old data
-            conditionDictionary["Days"][day]["processed"][particle] = True
+            conditionDictionary["Days"][date]["processed"][particle] = True
 
     if not (conditionDictionary == getConditions()):
         logger.info("overwriting yaml parameter file with new params")

@@ -110,5 +110,5 @@ Particles:
 - PM2.5_Std
 dayEnd: '17:00'
 dayStart: '10:00'
-processAll: true
+processAll: false
 sensorConditions: {}
