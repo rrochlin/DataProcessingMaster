@@ -9,7 +9,7 @@ dirname = os.path.dirname(__file__)
 if not os.path.exists(os.path.join(dirname,"..","..","dataInfo")):
     os.mkdir(os.path.join(dirname,"..","..","dataInfo"))
 logging.basicConfig(filename=os.path.join(dirname,"..","..","dataInfo","yamlGenLog.log"), level=logging.INFO)
-logger = logging.getLogger("data-cleaning")
+logger = logging.getLogger("genYamlParams")
 logger.propagate = True
 
 
