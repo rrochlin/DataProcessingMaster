@@ -44,10 +44,10 @@ def main():
             if not processAll:
                 try:
                     if condition["processed"][particle]:
-                        logger.info(f"skipping {day}, params file indicates data is already processed")
+                        logger.info(f"skipping {date}, params file indicates data is already processed")
                         continue
                 except KeyError:
-                    logger.info(f"for {day}, {particle} was not set in processed dict")
+                    logger.info(f"for {date}, {particle} was not set in processed dict")
                     pass
 
 
