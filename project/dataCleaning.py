@@ -13,11 +13,15 @@ from cleanUpData import cleanUp
 
 
 dirname = os.path.dirname(__file__)
-dataInfoPathTuple = os.path.join(dirname,"..","..","dataInfo")
-if not os.path.exists(os.path.join(dataInfoPathTuple)):
-    os.mkdir(os.path.join(dataInfoPathTuple))
-
-logging.basicConfig(filename=os.path.join(dataInfoPathTuple, "dataCleaning.log"),level=logging.INFO, force = True)
+dataInfoPath = os.path.join(dirname,"..","..","dataInfo")
+if not os.path.exists(os.path.join(dataInfoPath)):
+    os.mkdir(os.path.join(dataInfoPath))
+logging.basicConfig(
+    filename=os.path.join(dataInfoPath, "dataCleaning.log"),
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S',
+    force = True)
 logger = logging.getLogger("data-cleaning")
 logger.propagate = True
 
@@ -31,10 +35,10 @@ def main():
     # collect and organise all of the data then make it into nice things
     conditionDictionary = getConditions()
     # remove old logs from previous run
-    if os.path.exists(os.path.join(dataInfoPathTuple,"interpolation_Effect_Log.txt")):
-        os.remove(os.path.join(dataInfoPathTuple,"interpolation_Effect_Log.txt"))
-    if os.path.exists(os.path.join(dataInfoPathTuple,"time_Frequency_Error_Log.txt")):
-        os.remove(os.path.join(dataInfoPathTuple,"time_Frequency_Error_Log.txt"))
+    if os.path.exists(os.path.join(dataInfoPath,"interpolation_Effect_Log.txt")):
+        os.remove(os.path.join(dataInfoPath,"interpolation_Effect_Log.txt"))
+    if os.path.exists(os.path.join(dataInfoPath,"time_Frequency_Error_Log.txt")):
+        os.remove(os.path.join(dataInfoPath,"time_Frequency_Error_Log.txt"))
 
     columns = conditionDictionary["Columns"]
     particles = conditionDictionary["Particles"]
@@ -141,11 +145,11 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
     endTime = pd.Timestamp(end)
 
 
-    directory = os.path.join(dataInfoPathTuple)
+    directory = os.path.join(dataInfoPath)
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    fout = open(os.path.join(dataInfoPathTuple,'time_Frequency_Error_Log.txt'), 'a')
+    fout = open(os.path.join(dataInfoPath,'time_Frequency_Error_Log.txt'), 'a')
     fout.write(f"{'-'*60}\n{date}\n{'-'*60}\n")
     errors = {}
     errorCount = {}
@@ -226,7 +230,7 @@ def interpolateMissingData(data, cutOffTime, endTime, date, cutoff:int = 40, fre
     you can reduce the time frequency lower, however this can drastically increase the time it take to run the data cleaning process,
     especially with larger sets of data.
     '''
-    fout = open(os.path.join(dataInfoPathTuple,'interpolation_Effect_Log.txt'), 'a')
+    fout = open(os.path.join(dataInfoPath,'interpolation_Effect_Log.txt'), 'a')
     interpDF = {}
     fout.write(f"\n{date}\n\n")
 
