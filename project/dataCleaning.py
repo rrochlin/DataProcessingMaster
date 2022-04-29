@@ -11,9 +11,13 @@ import math
 from fillDataFrame import fillDf
 from cleanUpData import cleanUp
 
-if not os.path.exists(os.path.join("..","..","dataInfo")):
-    os.mkdir(os.path.join("..","..","dataInfo"))
-logging.basicConfig(filename=os.path.join("..","..","dataInfo","dataCleaning.log"),level=logging.INFO)
+
+dirname = os.path.dirname(__file__)
+dataInfoPathTuple = os.path.join(dirname,"..","..","dataInfo")
+if not os.path.exists(os.path.join(dataInfoPathTuple)):
+    os.mkdir(os.path.join(dataInfoPathTuple))
+
+logging.basicConfig(filename=os.path.join(dataInfoPathTuple, "dataCleaning.log"),level=logging.INFO, force = True)
 logger = logging.getLogger("data-cleaning")
 logger.propagate = True
 
@@ -27,10 +31,10 @@ def main():
     # collect and organise all of the data then make it into nice things
     conditionDictionary = getConditions()
     # remove old logs from previous run
-    if os.path.exists(os.path.join("..","..","dataInfo","interpolation_Effect_Log.txt")):
-        os.remove(os.path.join("..","..","dataInfo","interpolation_Effect_Log.txt"))
-    if os.path.exists(os.path.join("..","..","dataInfo","time_Frequency_Error_Log.txt")):
-        os.remove(os.path.join("..","..","dataInfo","time_Frequency_Error_Log.txt"))
+    if os.path.exists(os.path.join(dataInfoPathTuple,"interpolation_Effect_Log.txt")):
+        os.remove(os.path.join(dataInfoPathTuple,"interpolation_Effect_Log.txt"))
+    if os.path.exists(os.path.join(dataInfoPathTuple,"time_Frequency_Error_Log.txt")):
+        os.remove(os.path.join(dataInfoPathTuple,"time_Frequency_Error_Log.txt"))
 
     columns = conditionDictionary["Columns"]
     particles = conditionDictionary["Particles"]
@@ -73,7 +77,7 @@ def main():
                     checkFileList.append(specificFile)
             conditionDictionary["Days"][date]["confirmedFiles"] = checkFileList
 
-            saveToCSV(os.path.join("..","..","proccessedData",date,re.sub(r'\W','',particle)), data)
+            saveToCSV(os.path.join(dirname,"..","..","proccessedData",date,re.sub(r'\W','',particle)), data)
 
             logger.debug(data)
 
@@ -82,19 +86,19 @@ def main():
 
             interpDF = interpolateMissingData(
                 data, cutOffTime=start, endTime=end, date=date)
-            saveToCSV(os.path.join("..","..","interpolatedData",date,re.sub(r'\W','',particle)), interpDF)
+            saveToCSV(os.path.join(dirname,"..","..","interpolatedData",date,re.sub(r'\W','',particle)), interpDF)
 
             mergedDataFrame = mergeDataFrames(
                 interpDF, particle, start, end)
 
-            saveToCSV(os.path.join("..","..","mergedData",re.sub(r'\W','',particle)),{f"mergedData_{date}": mergedDataFrame})
+            saveToCSV(os.path.join(dirname,"..","..","mergedData",re.sub(r'\W','',particle)),{f"mergedData_{date}": mergedDataFrame})
 
             # Set process flag to True so that time won't be wasted processing old data
             conditionDictionary["Days"][date]["processed"][particle] = True
 
     if not (conditionDictionary == getConditions()):
         logger.info("overwriting yaml parameter file with new params")
-        with open('dataCleaningParams.yaml', 'w') as outfile:
+        with open(os.path.join(dirname,"dataCleaningParams.yaml"), 'w') as outfile:
             yaml.dump(conditionDictionary, outfile, default_flow_style=False)
     return
 
@@ -104,7 +108,7 @@ def getConditions():
     yaml file should contain the specific variables for the data cleaning:
     filePattern, sensorConditions, columns, DataChecking, preCursorFactor, particle
     '''
-    with open("dataCleaningParams.yaml", "r") as stream:
+    with open(os.path.join(dirname,"dataCleaningParams.yaml"), "r") as stream:
         try:
             allConditions = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
@@ -137,12 +141,11 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
     endTime = pd.Timestamp(end)
 
 
-    directory = os.path.join('..','..','dataInfo')
+    directory = os.path.join(dataInfoPathTuple)
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    # fout = open(f'{directory}/time_Frequency_Error_Log.txt', 'wt')
-    fout = open(os.path.join("..","..",'dataInfo','time_Frequency_Error_Log.txt'), 'a')
+    fout = open(os.path.join(dataInfoPathTuple,'time_Frequency_Error_Log.txt'), 'a')
     fout.write(f"{'-'*60}\n{date}\n{'-'*60}\n")
     errors = {}
     errorCount = {}
@@ -223,7 +226,7 @@ def interpolateMissingData(data, cutOffTime, endTime, date, cutoff:int = 40, fre
     you can reduce the time frequency lower, however this can drastically increase the time it take to run the data cleaning process,
     especially with larger sets of data.
     '''
-    fout = open(os.path.join("..","..",'dataInfo','interpolation_Effect_Log.txt'), 'a')
+    fout = open(os.path.join(dataInfoPathTuple,'interpolation_Effect_Log.txt'), 'a')
     interpDF = {}
     fout.write(f"\n{date}\n\n")
 

@@ -5,9 +5,10 @@ import yaml
 import logging
 import re
 
-if not os.path.exists(os.path.join("..","..","dataInfo")):
-    os.mkdir(os.path.join("..","..","dataInfo"))
-logging.basicConfig(filename=os.path.join("..","..","dataInfo","yamlGenLog.log"), level=logging.INFO)
+dirname = os.path.dirname(__file__)
+if not os.path.exists(os.path.join(dirname,"..","..","dataInfo")):
+    os.mkdir(os.path.join(dirname,"..","..","dataInfo"))
+logging.basicConfig(filename=os.path.join(dirname,"..","..","dataInfo","yamlGenLog.log"), level=logging.INFO)
 logger = logging.getLogger("data-cleaning")
 logger.propagate = True
 
@@ -26,7 +27,7 @@ def main():
         for obj in missingObjects:
             conditionDictionary["Days"].update(obj)
         logger.info("overwriting yaml parameter file with new params")
-        with open('dataCleaningParams.yaml', 'w') as outfile:
+        with open(os.path.join(dirname,"dataCleaningParams.yaml"), 'w') as outfile:
             yaml.dump(conditionDictionary, outfile, default_flow_style=False)
 
     return
@@ -41,7 +42,7 @@ def getConditions():
     yaml file should contain the specific variables for the data cleaning:
     filePattern, sensorConditions, columns, DataChecking, preCursorFactor, particle
     '''
-    with open("dataCleaningParams.yaml", "r") as stream:
+    with open(os.path.join(dirname,"dataCleaningParams.yaml"), "r") as stream:
         try:
             allConditions = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
