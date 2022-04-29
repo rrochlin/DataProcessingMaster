@@ -1,0 +1,56 @@
+import os
+import glob
+from time import perf_counter
+import yaml
+import logging
+import re
+
+if not os.path.exists(os.path.join("..","..","dataInfo")):
+    os.mkdir(os.path.join("..","..","dataInfo"))
+logging.basicConfig(filename=os.path.join("..","..","dataInfo","yamlGenLog.log"), level=logging.INFO)
+logger = logging.getLogger("data-cleaning")
+logger.propagate = True
+
+
+def main():
+    conditionDictionary = getConditions()
+    allFiles = ' '.join(glob.glob(os.path.join('..','Data',"*.txt")))
+    datePattern = r"(?<=-)\d{1,2}\S\d{1,2}\S\d{1,2}|(?<=_)\d{1,2}\S\d{1,2}\S\d{1,2}"
+    datesInData = {match.replace("_","-") for match in re.findall(datePattern,allFiles)}
+    datesInYaml = set(conditionDictionary["Days"].keys())
+    missingDates = [dataDate for dataDate in datesInData if dataDate not in datesInYaml]
+    if missingDates:
+        missingObjects = [genSampleObj(date) for date in missingDates]
+        # print(missingObjects)
+        logger.info(f"dates added to yaml: {missingDates}")
+        for obj in missingObjects:
+            conditionDictionary["Days"].update(obj)
+        logger.info("overwriting yaml parameter file with new params")
+        with open('dataCleaningParams.yaml', 'w') as outfile:
+            yaml.dump(conditionDictionary, outfile, default_flow_style=False)
+
+    return
+
+
+def genSampleObj(date):
+    return {date: {"confirmedFiles" : [], "filePattern": ["..","Data",f"*{date}.txt"], "processed": {}}}
+
+
+def getConditions():
+    '''
+    yaml file should contain the specific variables for the data cleaning:
+    filePattern, sensorConditions, columns, DataChecking, preCursorFactor, particle
+    '''
+    with open("dataCleaningParams.yaml", "r") as stream:
+        try:
+            allConditions = yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            logger.exception(exc)
+    return allConditions
+
+
+if __name__ == "__main__":
+    start = perf_counter()
+    main()
+    end = perf_counter()
+    logger.info(end-start)
