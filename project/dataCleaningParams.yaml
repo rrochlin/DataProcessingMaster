@@ -9,7 +9,6 @@ Days:
     - ..\Data\A16_4_13_22.txt
     - ..\Data\A7_4_13_22.txt
     - ..\Data\A8_4_13_22.txt
-    date: 4-13-22
     filePattern:
     - ..
     - Data
@@ -22,7 +21,6 @@ Days:
     confirmedFiles:
     - ..\Data\A16_4-14-22.txt
     - ..\Data\A8_4-14-22.txt
-    date: 4-14-22
     filePattern:
     - ..
     - Data
@@ -36,7 +34,6 @@ Days:
     - ..\Data\A16_4-15-22.txt
     - ..\Data\A7-4-15-22.txt
     - ..\Data\A8-4-15-22.txt
-    date: 4-15-22
     filePattern:
     - ..
     - Data
@@ -50,7 +47,6 @@ Days:
     - ..\Data\A16-4-18-22.txt
     - ..\Data\A7-4-18-22.txt
     - ..\Data\A8-4-18-22.txt
-    date: 4-18-22
     filePattern:
     - ..
     - Data
@@ -64,7 +60,6 @@ Days:
     - ..\Data\A16-4-19-22.txt
     - ..\Data\A7-4-19-22.txt
     - ..\Data\A8-4-19-22.txt
-    date: 4-19-22
     filePattern:
     - ..
     - Data
@@ -76,7 +71,6 @@ Days:
   4-20-22:
     confirmedFiles:
     - ..\Data\A16-4-20-22.txt
-    date: 4-20-22
     filePattern:
     - ..
     - Data
@@ -90,7 +84,6 @@ Days:
     - ..\Data\A16-4-21-22.txt
     - ..\Data\A8-4-21-22.txt
     - ..\Data\A7-4-21-22.txt
-    date: 4-21-22
     filePattern:
     - ..
     - Data
@@ -104,7 +97,6 @@ Days:
     - ..\Data\A16-4-22-22.txt
     - ..\Data\A7-4-22-22.txt
     - ..\Data\A8-4-22-22.txt
-    date: 4-22-22
     filePattern:
     - ..
     - Data
@@ -112,11 +104,11 @@ Days:
     processed:
       Dp>0.3: true
       PM1_Std: true
-      PM2.5_Std: false
+      PM2.5_Std: true
 Particles:
 - Dp>0.3
 - PM2.5_Std
 dayEnd: '17:00'
 dayStart: '10:00'
-processAll: false
+processAll: true
 sensorConditions: {}
