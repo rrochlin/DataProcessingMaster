@@ -11,7 +11,7 @@ import math
 from fillDataFrame import fillDf
 from cleanUpData import cleanUp
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename=os.path.join("..","..","dataInfo","dataCleaning.log"),level=logging.INFO)
 logger = logging.getLogger("data-cleaning")
 logger.propagate = True
 
