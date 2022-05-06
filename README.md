@@ -32,7 +32,7 @@ install pip globally if you do not have it (run `pip --version` to see if you ha
 install git globally if you do not have it (run `git --version` to see if you have it)\
 run `git clone {branch_clone_link}`\
 run `pip install virtualenv`\
-create a virtual environemnt with the command `pythonvirtualenv {environment name}`\
+create a virtual environemnt with the command `python virtualenv {environment name}`\
 activate the virtual environment with `./{environment name}/Scripts/activate` on windows or `source {environment name}/bin/activate` on unix\
 change directory to dataProcessingMaster with `cd dataProcessingMaster`\
 run the command `pip install -e .` to install all dependencies from setup.py\
