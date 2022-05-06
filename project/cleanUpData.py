@@ -145,7 +145,7 @@ def fixUTCStamps(filePath, date):
         r",\s+\d+:\d+:\d+", content[3]).span()
 
     fout = open(filePath, 'wt')
-    incorrectString = r"   \d{2}/\d+/\d+"
+    incorrectString = r"\s+\d{2}/\d+/\d+"
     for idx, i in enumerate(content):
         match = re.match(incorrectString, i)
         if match:
