@@ -21,10 +21,12 @@ logger.propagate = True
 def main():
     conditionDictionary = getConditions()
     allFiles = ' '.join(glob.glob(os.path.join(dirname,'..','Data',"*.txt")))
+    logger.info(allFiles)
     datePattern = r"(?<=-)\d{1,2}\S\d{1,2}\S\d{1,2}|(?<=_)\d{1,2}\S\d{1,2}\S\d{1,2}"
     datesInData = {match.replace("_","-") for match in re.findall(datePattern,allFiles)}
     datesInYaml = set(conditionDictionary["Days"].keys())
     missingDates = [dataDate for dataDate in datesInData if dataDate not in datesInYaml]
+    logger.info(missingDates)
     if missingDates:
         missingObjects = [genSampleObj(date) for date in missingDates]
         logger.info(f"dates added to yaml: {missingDates}")

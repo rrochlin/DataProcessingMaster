@@ -120,6 +120,7 @@ def cleanUp(cutoff, timeRectifyingParams, filePaths, columns, badTimes, date, co
 
 
 def fixUTCStamps(filePath, date):
+    logger.info(f"Fixing UTC stamps for {date}:{filePath}")
     '''
     This function will parse the text array and convert any timestamps in YY/MM/dd format
     to YYYY/MM/dd format while setting back the time by 7 hours for UTC -> PST timezone
@@ -146,7 +147,7 @@ def fixUTCStamps(filePath, date):
         r",\s+\d+:\d+:\d+", content[3]).span()
 
     fout = open(filePath, 'wt')
-    incorrectString = r"   \d{2}/\d+/\d+"
+    incorrectString = r"\s+\d{2}/\d+/\d+"
     for idx, i in enumerate(content):
         match = re.match(incorrectString, i)
         if match:

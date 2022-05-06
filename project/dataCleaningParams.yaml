@@ -119,6 +119,88 @@ Days:
     processed:
       Dp>0.3: true
       PM2.5_Std: true
+  4-28-22:
+    confirmedFiles:
+    - ..\Data\A7-4-28-22.txt
+    - ..\Data\A8-4-28-22.txt
+    - ..\Data\A16-4-28-22.txt
+    filePattern:
+    - ..
+    - Data
+    - '*4-28-22.txt'
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
+  4-29-22:
+    confirmedFiles:
+    - ..\Data\A16-4-29-22.txt
+    - ..\Data\A8-4-29-22.txt
+    - ..\Data\A7-4-29-22.txt
+    filePattern:
+    - ..
+    - Data
+    - '*4-29-22.txt'
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
+  4-30-22:
+    confirmedFiles:
+    - ..\Data\A16-4-30-22.txt
+    - ..\Data\A8-4-30-22.txt
+    - ..\Data\A7-4-30-22.txt
+    filePattern:
+    - ..
+    - Data
+    - '*4-30-22.txt'
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
+  5-1-22:
+    confirmedFiles:
+    - ..\Data\A7-5-1-22.txt
+    - ..\Data\A16-5-1-22.txt
+    - ..\Data\A8-5-1-22.txt
+    filePattern:
+    - ..
+    - Data
+    - '*5-1-22.txt'
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
+  5-2-22:
+    confirmedFiles:
+    - ..\Data\A7-5-2-22.txt
+    - ..\Data\A8-5-2-22.txt
+    filePattern:
+    - ..
+    - Data
+    - '*5-2-22.txt'
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
+  5-3-22:
+    confirmedFiles:
+    - ..\Data\A8-5-3-22.txt
+    - ..\Data\A7-5-3-22.txt
+    filePattern:
+    - ..
+    - Data
+    - '*5-3-22.txt'
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
+  5-4-22:
+    confirmedFiles:
+    - ..\Data\A8-5-4-22.txt
+    - ..\Data\A16-5-4-22.txt
+    - ..\Data\A7-5-4-22.txt
+    filePattern:
+    - ..
+    - Data
+    - '*5-4-22.txt'
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
 Particles:
 - Dp>0.3
 - PM2.5_Std
