@@ -5,40 +5,65 @@ Columns:
 - 13
 Days:
   05-13-22:
-    confirmedFiles: []
+    confirmedFiles:
+    - ..\Data\A16-5-13_5-17.txt
+    - ..\Data\A7-5-13_5-17.txt
+    - ..\Data\A8-5-13_5-17.txt
     filePattern:
     - ..
     - Data
     - '*5-13_5-17.txt'
-    processed: {}
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
   05-14-22:
-    confirmedFiles: []
+    confirmedFiles:
+    - ..\Data\A16-5-13_5-17.txt
+    - ..\Data\A7-5-13_5-17.txt
+    - ..\Data\A8-5-13_5-17.txt
     filePattern:
     - ..
     - Data
     - '*5-13_5-17.txt'
-    processed: {}
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
   05-15-22:
-    confirmedFiles: []
+    confirmedFiles:
+    - ..\Data\A16-5-13_5-17.txt
+    - ..\Data\A7-5-13_5-17.txt
+    - ..\Data\A8-5-13_5-17.txt
     filePattern:
     - ..
     - Data
     - '*5-13_5-17.txt'
-    processed: {}
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
   05-16-22:
-    confirmedFiles: []
+    confirmedFiles:
+    - ..\Data\A16-5-13_5-17.txt
+    - ..\Data\A7-5-13_5-17.txt
+    - ..\Data\A8-5-13_5-17.txt
     filePattern:
     - ..
     - Data
     - '*5-13_5-17.txt'
-    processed: {}
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
   05-17-22:
-    confirmedFiles: []
+    confirmedFiles:
+    - ..\Data\A16-5-13_5-17.txt
+    - ..\Data\A7-5-13_5-17.txt
+    - ..\Data\A8-5-13_5-17.txt
     filePattern:
     - ..
     - Data
     - '*5-13_5-17.txt'
-    processed: {}
+    processed:
+      Dp>0.3: true
+      PM2.5_Std: true
   4-13-22:
     confirmedFiles:
     - ..\Data\A16_4_13_22.txt
