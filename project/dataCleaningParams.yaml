@@ -4,6 +4,41 @@ Columns:
 - 6
 - 13
 Days:
+  05-13-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*5-13_5-17.txt'
+    processed: {}
+  05-14-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*5-13_5-17.txt'
+    processed: {}
+  05-15-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*5-13_5-17.txt'
+    processed: {}
+  05-16-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*5-13_5-17.txt'
+    processed: {}
+  05-17-22:
+    confirmedFiles: []
+    filePattern:
+    - ..
+    - Data
+    - '*5-13_5-17.txt'
+    processed: {}
   4-13-22:
     confirmedFiles: []
     filePattern:

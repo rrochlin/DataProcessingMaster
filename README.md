@@ -18,6 +18,7 @@ In order to set up this repo on your local directory create a new branch to work
 |-------dataCleaning.py         <---- base script to run. handles calling cleanUp from cleanUpData.py and parsing yaml params\
 |-------dataCleaningParams.yaml <---- parameter file for adjusting settings of the script\
 |-------fillDataFrame.py        <---- handles linearly interpolating or 0 padding data to get us high resolution data\
+|-------genNewYamlParams.py     <---- generates new yaml elements to parse new dates
 |----README.md                  <---- this is where you are now\
 |----setup.py                   <---- package info, don't touch</pre>
 
@@ -41,6 +42,7 @@ you're all set up now!
 # Using the data processing script
 the script expects the user to edit dataCleaningParams.yaml in order to control its behavior
 run the script from the project directory with the command `python dataCleaning.py`
+if there is data for new dates in the file folder then you can run the command `python genNewYamlParams.py` this will auto populate the yaml file
 ## dataCleaningParams.yaml
 `Columns: [0,1,6,13]` This variable specifies which columns from the raw data to take. Here we are grabbing date, time, dp>0.3 and PM2.5_Std\
 `Days:` keep as Days\

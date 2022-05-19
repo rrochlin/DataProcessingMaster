@@ -102,10 +102,11 @@ def main():
             # Set process flag to True so that time won't be wasted processing old data
             conditionDictionary["Days"][date]["processed"][particle] = True
 
-    if not (conditionDictionary == getConditions()):
-        logger.info("overwriting yaml parameter file with new params")
-        with open(os.path.join(dirname, "dataCleaningParams.yaml"), 'w') as outfile:
-            yaml.dump(conditionDictionary, outfile, default_flow_style=False)
+            if not (conditionDictionary == getConditions()):
+                # update the params on each iteration to prevent cleaning the same data file multiple times.
+                logger.info("overwriting yaml parameter file with new params")
+                with open(os.path.join(dirname, "dataCleaningParams.yaml"), 'w') as outfile:
+                    yaml.dump(conditionDictionary, outfile, default_flow_style=False)
     return
 
 
