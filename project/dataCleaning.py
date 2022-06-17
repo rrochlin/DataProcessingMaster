@@ -223,7 +223,7 @@ def checkDataRecordingPerformance(data, date, particle, start, end):
             fout.write('\n')
 
         else:
-            totalTimeLost = timeDeltaEnd-timeDeltaStart
+            totalTimeLost = endTime-startTime
             logger.info(f"no data was found in time range for {x}")
             fout.write(f"no data was found in time range for {x}\n")
             fout.write('\n')
